@@ -33,6 +33,7 @@ public:
     QString getPreviewFullPath() const;
     size_t getTotalPixels() const;
     QString getFormattedStatus() const;
+    QString getAdditionalInfo() const;
     QString getDirectory() const;
     QString getCompressedDirectory() const;
     QString getHashedFullPath() const;

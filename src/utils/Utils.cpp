@@ -170,6 +170,62 @@ QJsonObject getCompressionOptionsAsJSON()
     return QJsonObject::fromVariantMap(settingsMap);
 }
 
+CompressionOptions compressionOptionsForShellContext(const QString& rootFolder)
+{
+    QSettings settings;
+
+    const int fitTo = settings.value("compression_options/resize/fit_to", 0).toInt();
+    const bool resizeEnabled = fitTo != static_cast<int>(ResizeMode::NO_RESIZE);
+
+    FileDatesOutputOption datesMap = {
+        settings.value("compression_options/output/keep_creation_date", false).toBool(),
+        settings.value("compression_options/output/keep_last_modified_date", false).toBool(),
+        settings.value("compression_options/output/keep_last_access_date", false).toBool(),
+    };
+
+    const int jpegQuality = settings.value("compression_options/compression/jpeg_quality", 80).toInt();
+    const int pngQuality = settings.value("compression_options/compression/png_quality", 80).toInt();
+    const int webpQuality = settings.value("compression_options/compression/webp_quality", 60).toInt();
+    const int tiffDeflateSlider = settings.value("compression_options/compression/tiff_deflate_level", 2).toInt();
+
+    CompressionOptions compressionOptions = {
+        settings.value("compression_options/output/output_folder", "").toString(),
+        rootFolder,
+        QStringLiteral("_comp"),
+        settings.value("compression_options/output/format", 0).toInt(),
+        settings.value("compression_options/compression/lossless", false).toBool(),
+        settings.value("compression_options/compression/keep_metadata", true).toBool(),
+        false,
+        resizeEnabled,
+        fitTo,
+        settings.value("compression_options/resize/width", 1000).toInt(),
+        settings.value("compression_options/resize/height", 1000).toInt(),
+        settings.value("compression_options/resize/size", 1000).toInt(),
+        settings.value("compression_options/resize/do_not_enlarge", false).toBool(),
+        true,
+        settings.value("compression_options/output/skip_if_bigger", true).toBool(),
+        false,
+        0,
+        qBound(1, jpegQuality, 100),
+        settings.value("compression_options/compression/jpeg_chroma_subsampling", 0).toInt(),
+        settings.value("compression_options/compression/jpeg_progressive", true).toBool(),
+        qBound(0, pngQuality, 100),
+        qBound(1, settings.value("compression_options/compression/png_optimization_level", 3).toInt(), 6),
+        qBound(1, webpQuality, 100),
+        settings.value("compression_options/compression/tiff_method", 1).toInt(),
+        qBound(1, tiffDeflateSlider * 3, 9),
+        settings.value("compression_options/output/keep_dates", Qt::Unchecked).value<Qt::CheckState>() != Qt::Unchecked,
+        datesMap,
+        static_cast<CompressionMode>(settings.value("compression_options/compression/mode", 0).toInt()),
+        MaxOutputSize {
+            static_cast<MaxOutputSizeUnit>(settings.value("compression_options/compression/max_output_size_unit", 0).toInt()),
+            static_cast<size_t>(settings.value("compression_options/compression/max_output_size", 500).toInt()),
+        },
+    };
+
+    return compressionOptions;
+}
+
 QString getCompressionOptionsHash()
 {
     QSettings settings;

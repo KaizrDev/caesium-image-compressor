@@ -1,0 +1,11 @@
+Windows Registry Editor Version 5.00
+; Per-user context menu for the "image" file type association.
+; Edit REPLACE_WITH_EXE to your installed "Caesium Image Compressor.exe" full path (double backslashes).
+; Import by double-clicking this file, or: reg import register-context-menu.reg
+
+[HKEY_CURRENT_USER\Software\Classes\SystemFileAssociations\image\shell\CaesiumCompress]
+@="Compress image with Caesium"
+"Icon"="REPLACE_WITH_EXE"
+
+[HKEY_CURRENT_USER\Software\Classes\SystemFileAssociations\image\shell\CaesiumCompress\command]
+@="\"REPLACE_WITH_EXE\" --compress-context \"%1\""

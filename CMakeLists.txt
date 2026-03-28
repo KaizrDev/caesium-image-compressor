@@ -98,6 +98,7 @@ set(SOURCES
         src/utils/Utils.cpp
         src/utils/LanguageManager.cpp
         src/utils/Logger.cpp
+        src/utils/ShellContextCompress.cpp
         src/utils/PostCompressionActions.cpp
         src/dialogs/AboutDialog.cpp
         src/widgets/QDropTreeView.cpp
@@ -180,11 +181,19 @@ set(RESOURCES
 
 if (WIN32)
     add_executable(${TARGET} WIN32 ${SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
+    install(FILES extras/shell-integration/windows/register-context-menu.reg
+            DESTINATION share/caesium-image-compressor/shell-integration)
 elseif (APPLE)
     add_executable(${TARGET} MACOSX_BUNDLE ${SOURCES} ${OSX_SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
+    install(PROGRAMS extras/shell-integration/macos/caesium-compress.sh
+            DESTINATION share/caesium-image-compressor/shell-integration)
 else ()
     add_executable(${TARGET} ${SOURCES} ${OSX_SOURCES} ${UI} ${RESOURCES} ${CAESIUM_ICON} ${QM_FILES})
     install(TARGETS ${TARGET} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+    install(FILES
+            extras/shell-integration/linux/caesium-compress.nemo_action
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/caesium-image-compressor/shell-integration
+    )
     if (NOT LIBCAESIUM)
         install(
                 FILES ${LIBCAESIUM_SOURCE_DIR}/target/${LIBCAESIUM_BUILD_TYPE}/libcaesium.so

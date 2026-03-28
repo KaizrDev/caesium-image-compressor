@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "utils/Logger.h"
+#include "utils/ShellContextCompress.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -94,8 +95,19 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
 
     QCommandLineParser parser;
+    const QCommandLineOption compressContextOption(QStringList() << QStringLiteral("compress-context") << QStringLiteral("shell-compress"),
+        QStringLiteral("Compress images from the file manager (writes *_comp next to originals)."));
+    parser.addOption(compressContextOption);
+    parser.addPositionalArgument(QStringLiteral("files"), QStringLiteral("Image files"));
+    parser.addHelpOption();
     parser.addVersionOption();
     parser.process(a);
+
+    if (parser.isSet(compressContextOption)) {
+        loadTheme(a);
+        qInfo() << "---- Shell context compress ----";
+        return runShellContextCompress(a, parser.positionalArguments());
+    }
 
     loadTheme(a);
 

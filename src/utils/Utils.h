@@ -165,6 +165,7 @@ void showDirectoryInNativeFileManager(const QString& dirPath);
 QJsonObject getSystemData();
 QJsonObject getCompressionOptionsAsJSON();
 QString getCompressionOptionsHash();
+CompressionOptions compressionOptionsForShellContext(const QString& rootFolder);
 QString hashString(const QString& data, QCryptographicHash::Algorithm algorithm);
 QStringList getOutputSupportedFormats();
 QMap<int, QString> getChromaSubsamplingOptions();

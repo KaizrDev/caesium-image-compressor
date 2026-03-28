@@ -1,0 +1,9 @@
+[Nemo Action]
+Active=true
+Name=Compress image with Caesium
+Comment=Create a compressed copy in the same folder with _comp in the filename (uses your Caesium settings).
+Exec=caesium-image-compressor --compress-context %F
+Icon-Name=image-x-generic
+Selection=NotNone
+Extensions=jpg;jpeg;jpe;png;webp;tiff;tif;
+Quote=double

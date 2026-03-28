@@ -394,6 +394,11 @@ size_t CImage::getTotalPixels() const
     return this->width * this->height;
 }
 
+QString CImage::getAdditionalInfo() const
+{
+    return this->additionalInfo;
+}
+
 QString CImage::getFormattedStatus() const
 {
     switch (this->status) {
